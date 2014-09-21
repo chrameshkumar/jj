@@ -1,0 +1,48 @@
+##UI
+library(shiny)
+p(em("Documentation:",a("Air Quality data analysis",href="index.html")))
+# Define UI for dataset viewer application
+shinyUI(fluidPage(
+  
+  # App title
+  titlePanel("Air Quality data analysis"),
+  
+  # Side bar with reactive control provides following options:
+  # 1. Sidebar for sub heading. Default value can be changed dynamically
+  # 2. Pull down menu option to select a month for data view
+  # 3. Radio buttons to select a variable for graphical display
+  # 4. Check box to display table of observations; default – no display  
+  # 5. On clicking check box slider bar appears to select no of records to be displayed
+  # 6.  Default 5 records are displayed below the graph
+   
+  sidebarLayout(
+    sidebarPanel(
+    textInput("sh", "Sub Heading:", "Data Summary - Selected Month"),
+         
+    selectInput("dataset", "Select a Month:",
+                choices = c("May","June","July","Aug","Sep")),
+    
+    radioButtons("grtp","Select graph parameter:",
+                 list("Ozone"="1","Solar.R"="2","Wind"="3","Temperature"="4")),
+    
+    
+    checkboxInput("tbl","Show data table",FALSE),
+    conditionalPanel(
+      condition="input.tbl==true",
+      sliderInput("n","No of observations:",1,31,5),
+      textInput("tbl","Note","Table shown below graph")
+    ) 
+    ),
+        
+    # Printing desired values dynamically changed
+    mainPanel(
+      h6(textOutput("sh")),
+      verbatimTextOutput("summary"), 
+      textOutput("obs"),  
+      plotOutput("distPlot"),
+      p(em("Documentation:",a("Air Quality data analysis",href="index.html"))),
+      tableOutput("view")
+    )
+  )
+))
+
